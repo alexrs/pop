@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -43,7 +42,9 @@ func performRequest(url string) string {
 }
 
 func performSearch(query string) ([]string, error) {
-	userAgents := [...]string{
+	searchURL := "http://www.google.com/search?q=site:stackoverflow.com/questions%20" + url.QueryEscape(query)
+
+	/* userAgents := [...]string{
 		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0",
 		"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100 101 Firefox/22.0",
 		"Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0",
@@ -51,14 +52,14 @@ func performSearch(query string) ([]string, error) {
 		"Mozilla/5.0 (Windows; Windows NT 6.1) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.46' 'Safari/536.5",
 	}
 
-	searchURL := "http://www.google.com/search?q=site:stackoverflow.com/questions%20" + url.QueryEscape(query)
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", searchURL, nil)
 	if err != nil {
 		log.Fatal("error performing request")
 	}
 	req.Header.Add("User-Agent", userAgents[rand.Intn(len(userAgents))])
-	resp, err := client.Do(req)
+	resp, err := client.Do(req) */
+	resp, err := http.Get(searchURL)
 	defer resp.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(io.Reader(resp.Body))
