@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -18,7 +19,10 @@ func main() {
 	//Get query
 	query := strings.Join(os.Args[1:], " ")
 	//Perform request to Google searching for a query in StackOverflow
-	questions := performSearch(query)
+	questions, err := performSearch(query)
+	if err != nil {
+		log.Fatal("sorry, I couldn't find what you're looking for :(")
+	}
 	//Get the first link of the response. Perform a request to that link
 	answer := performRequest(questions[0])
 	//Display the answer propperly (http://misc.flogisoft.com/bash/tip_colors_and_formatting)
@@ -38,7 +42,7 @@ func performRequest(url string) string {
 	return doc.Find(".answercell .post-text").First().Text()
 }
 
-func performSearch(query string) []string {
+func performSearch(query string) ([]string, error) {
 	userAgents := [...]string{
 		"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:11.0) Gecko/20100101 Firefox/11.0",
 		"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100 101 Firefox/22.0",
@@ -76,7 +80,11 @@ func performSearch(query string) []string {
 			}
 		}
 	})
-	return links
+
+	if len(links) == 0 {
+		return nil, errors.New("search failed")
+	}
+	return links, nil
 }
 
 // returns true if the link match with the regex. This indicates that it's a real question
