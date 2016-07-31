@@ -60,6 +60,10 @@ func performSearch(query string) ([]string, error) {
 	req.Header.Add("User-Agent", userAgents[rand.Intn(len(userAgents))])
 	resp, err := client.Do(req) */
 	resp, err := http.Get(searchURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	defer resp.Body.Close()
 
 	doc, err := goquery.NewDocumentFromReader(io.Reader(resp.Body))
