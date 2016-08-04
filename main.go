@@ -14,9 +14,15 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+var (
+	colourize = false
+)
+
 func main() {
 	//Get query
 	query := strings.Join(os.Args[1:], " ")
+
+	query = parseColourizeFlag(query)
 	//Perform request to Google searching for a query in StackOverflow
 	questions, err := performSearch(query)
 	if err != nil {
@@ -29,8 +35,31 @@ func main() {
 }
 
 func printAnswer(answer, url string) {
+	if colourize {
+		answer, url = colourizeOutput(answer, url)
+	}
 	fmt.Println(answer)
-	fmt.Println("Url:", url)
+	fmt.Println(url)
+}
+
+func colourizeOutput(answer, url string) (string, string) {
+	for _, v := range os.Args[1:] {
+		answer = strings.Replace(answer, v, "\033[32m" + v + "\033[39m", -1)
+		if(len(v) >= 3){
+			answer = strings.Replace(answer, strings.Title(v), "\033[32m" + strings.Title(v) + "\033[39m", -1)
+			answer = strings.Replace(answer, strings.ToUpper(v), "\033[32m" + strings.ToUpper(v) + "\033[39m", -1)
+		}
+	}
+	url = "\033[32mUrl: \033[33m" + url + "\033[39m"
+	return answer, url
+}
+
+func parseColourizeFlag(query string) string {
+	if strings.Index(query, "-c") >= 0 {
+		colourize = true
+		query = strings.Replace(query, "-c", "", 1)
+	}
+	return query
 }
 
 func performRequest(url string) string {
