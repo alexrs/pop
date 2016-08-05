@@ -38,7 +38,18 @@ func performRequest(url string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
+	parseEmbededReferenceLinks(doc)
 	return doc.Find(".answercell .post-text").First().Text()
+}
+
+func parseEmbededReferenceLinks(doc *goquery.Document) {
+	doc.Find(".answercell .post-text").First().Find("a").Each(func(i int, s *goquery.Selection) {
+		href, success := s.Attr("href")
+		if success == true {
+			href = " (" + href + ")"
+			s.AppendHtml(href)
+		}
+	})
 }
 
 func performSearch(query string) ([]string, error) {
