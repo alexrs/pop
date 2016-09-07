@@ -14,6 +14,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+var questions_regex = regexp.MustCompile(`questions/\d+/`)
+
 func main() {
 	//Get query
 	query := strings.Join(os.Args[1:], " ")
@@ -106,6 +108,5 @@ func performSearch(query string) ([]string, error) {
 // returns true if the link match with the regex. This indicates that it's a real question
 // and not a tagged question.
 func isQuestion(link string) bool {
-	r := regexp.MustCompile(`questions/\d+/`)
-	return r.Find([]byte(link)) != nil
+	return questions_regex.Find([]byte(link)) != nil
 }
