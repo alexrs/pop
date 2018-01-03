@@ -42,7 +42,7 @@ Url: http://stackoverflow.com/questions/3806062/how-to-open-a-txt-file-and-read-
 ## Install
 
 ```BASH
-go get github.com/Alexrs95/pop
+go get github.com/alexrs/pop
 ```
 
 ## TODO
