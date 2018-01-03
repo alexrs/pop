@@ -1,7 +1,7 @@
 # Pop
 StackOverflow answers in your terminal.
 
-##Usage
+## Usage
 
 ```TEXT
 $ pop open file java
@@ -39,13 +39,13 @@ System.out.println(list);
 Url: http://stackoverflow.com/questions/3806062/how-to-open-a-txt-file-and-read-numbers-in-java
 ```
 
-##Install
+## Install
 
 ```BASH
 go get github.com/Alexrs95/pop
 ```
 
-##TODO
+## TODO
 - [ ] Parse the HTML better and display it properly
 - [ ] Tests
 - [ ] More options (contribute or suggest new features!)
